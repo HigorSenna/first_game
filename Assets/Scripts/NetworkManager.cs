@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
-using System.Net.Sockets;
-using System.Net.WebSockets;
+using Assets.DTO.Response;
 
 public class NetworkManager : MonoBehaviour
 
@@ -31,7 +29,7 @@ public class NetworkManager : MonoBehaviour
     {
         Dictionary<string, string> result = socketIOEvent.data.ToDictionary();
 
-        Debug.Log(socketIOEvent.data.);
+        //Debug.Log(socketIOEvent.data.);
         
         Debug.Log("mensagem do servidor: " + result["message"]);
     }
@@ -44,10 +42,15 @@ public class NetworkManager : MonoBehaviour
 
     public void sendPingToServer()
     {
+        UserResponseDTO userDTO = new UserResponseDTO();
+        userDTO.id = 1;
+        userDTO.name = "Player 1";        
+        userDTO.email = "player1@gmail.com";
         Dictionary<string, string> pack = new Dictionary<string, string>();
         pack["message"] = "message ping!!";
-
-        socketIo.Emit("ping", new JSONObject(pack));
+        
+        Debug.Log(JsonUtility.ToJson(userDTO));
+        socketIo.Emit("ping", new JSONObject(JsonUtility.ToJson(userDTO)));
        
     }
 }
